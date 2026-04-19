@@ -4,7 +4,6 @@ from sqlalchemy.orm import relationship, DeclarativeBase
 class Base(DeclarativeBase):
     pass
 
-# Вспомогательная таблица для связи Many-to-Many (Посты <-> Теги)
 post_tags = Table(
     "post_tags",
     Base.metadata,
@@ -18,9 +17,8 @@ class User(Base):
     username = Column(String, unique=True, nullable=False)
     email = Column(String, unique=True)
 
-    # Связи
-    profile = relationship("Profile", back_populates="user", uselist=False) # 1:1
-    posts = relationship("Post", back_populates="author") # 1:N
+    profile = relationship("Profile", back_populates="user", uselist=False)
+    posts = relationship("Post", back_populates="author")
 
 class Profile(Base):
     __tablename__ = "profiles"
@@ -38,7 +36,7 @@ class Post(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
 
     author = relationship("User", back_populates="posts")
-    tags = relationship("Tag", secondary=post_tags, back_populates="posts") # N:N
+    tags = relationship("Tag", secondary=post_tags, back_populates="posts")
 
 class Tag(Base):
     __tablename__ = "tags"
